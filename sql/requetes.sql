@@ -57,3 +57,12 @@ SELECT SUM(prix * quantite) AS valeur_totale FROM produits;
 777.5
 
 
+
+-- Q4.1 : Insérer une catégorie
+INSERT INTO categories (nom, description) VALUES ('Électroménager', 'Petits appareils');
+
+-- Q4.6 : Insérer un produit (Stylo bleu, 0.500 DT, 100 unités, Papeterie)
+INSERT INTO produits (nom, prix, quantite, disponible, date_ajout, categorie_id) 
+VALUES ('Stylo bleu', 0.500, 100, 1, '2026-10-05T10:00:00', 4);
+
+

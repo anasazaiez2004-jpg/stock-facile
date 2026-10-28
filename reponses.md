@@ -67,3 +67,24 @@ Q1.8 : Il est important de fermer DB Browser avant qu'un autre programme y accè
 
 **Question de réflexion (Q2.4) :** Pourquoi utilise-t-on ici un constructeur factory plutôt qu'un constructeur classique ? Pourquoi écrit-on (map['prix'] as num).toDouble() au lieu de map['prix'] as double?
 **Réponse :** On utilise `factory` car `fromMap` ne crée pas forcément une nouvelle instance de manière classique (et permet d'appliquer de la logique de conversion). On utilise `(map['prix'] as num).toDouble()` car SQLite peut renvoyer un `int` (par exemple `5`) ou un `double` (par exemple `5.0`) pour une colonne REAL. Passer par `num` évite un crash de type.
+
+
+
+
+**Q4.3 :** Quel id obtenez-vous ? Pourquoi cette valeur ?
+**Réponse :** J'obtiens l'id `5`. C'est la 5ème catégorie (les 4 premières ont été créées au démarrage). La valeur est incrémentée automatiquement grâce à `AUTOINCREMENT`.
+
+**Q4.4 :** Recopier le message d'erreur.
+**Réponse :** `SqliteException(2067): UNIQUE constraint failed: categories.nom`. C'est la contrainte `UNIQUE` sur la colonne `nom` qui bloque l'insertion.
+
+**Q4.9 :** Comment sont stockées les valeurs de disponible et date_ajout ?
+**Réponse :** `disponible` est stocké comme `1` (INTEGER). `date_ajout` est stocké comme une chaîne de caractères au format ISO 8601 (ex: `2026-10-05T10:00:00.000`). C'est conforme à la méthode `toMap()`.
+
+**Q4.10 :** Quelle erreur obtenez-vous avec categorieId 99 ?
+**Réponse :** `SqliteException(787): FOREIGN KEY constraint failed`. Si on commente le PRAGMA, l'erreur disparaît et le produit est inséré avec une catégorie qui n'existe pas (produit orphelin). Un simple hot reload ne suffit pas car le PRAGMA est exécuté à l'ouverture de la base (il faut redémarrer l'app pour rouvrir la base).
+
+**Q4.11 :** Quelle contrainte bloque l'insertion d'un prix négatif ?
+**Réponse :** La contrainte `CHECK (prix >= 0)`. Il est utile de vérifier aussi dans le formulaire Flutter pour donner un message d'erreur clair à l'utilisateur, au lieu de laisser l'application planter avec une erreur SQLite brute.
+
+**Question de réflexion (Q4) :** 
+**Réponse :** `ConflictAlgorithm.ignore` ignore l'erreur et n'insère rien. `ConflictAlgorithm.replace` supprime l'ancienne ligne et la remplace par la nouvelle. C'est dangereux avec une clé étrangère car si on remplace une catégorie, les produits liés peuvent se retrouver orphelins ou subir un `ON DELETE CASCADE` imprévu, supprimant des données en cascade.
