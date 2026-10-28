@@ -55,3 +55,5 @@ Papeterie	1
 SELECT SUM(prix * quantite) AS valeur_totale FROM produits;
 
 777.5
+
+
