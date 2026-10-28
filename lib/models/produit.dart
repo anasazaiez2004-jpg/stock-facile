@@ -6,7 +6,6 @@ class Produit {
   final bool disponible;
   final DateTime dateAjout;
   final int categorieId;
-  final int seuilAlerte;
 
   const Produit({
     this.id,
@@ -16,7 +15,6 @@ class Produit {
     this.disponible = true,
     required this.dateAjout,
     required this.categorieId,
-    this.seuilAlerte = 5,
   });
 
   factory Produit.fromMap(Map<String, dynamic> map) {
@@ -28,20 +26,24 @@ class Produit {
       disponible: map['disponible'] == 1,
       dateAjout: DateTime.parse(map['date_ajout'] as String),
       categorieId: map['categorie_id'] as int,
-      seuilAlerte: map['seuil_alerte'] as int? ?? 5,
     );
   }
 
+  // Écrit par toi (Q2.4) : Objet Dart → Map SQLite
   Map<String, dynamic> toMap() {
     return {
       if (id != null) 'id': id,
       'nom': nom,
       'prix': prix,
       'quantite': quantite,
-      'disponible': disponible ? 1 : 0,
-      'date_ajout': dateAjout.toIso8601String(),
-      'categorie_id': categorieId,
-      'seuil_alerte': seuilAlerte,
+      'disponible': disponible ? 1 : 0,          // bool → int
+      'date_ajout': dateAjout.toIso8601String(), // DateTime → String
+      'categorie_id': categorieId,               // camelCase → snake_case
     };
+  }
+
+  @override
+  String toString() {
+    return 'Produit(id: $id, nom: $nom, prix: $prix, quantite: $quantite)';
   }
 }

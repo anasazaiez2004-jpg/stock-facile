@@ -51,3 +51,19 @@ DELETE FROM categories WHERE id = 1;
 
 Q1.7 : Le fichier schema.sql contient les instructions SQL CREATE TABLE permettant de recréer la structure de la base à l'identique.
 Q1.8 : Il est important de fermer DB Browser avant qu'un autre programme y accède, car SQLite utilise un système de verrouillage de fichier. Si DB Browser garde le fichier ouvert, l'application Flutter ne pourra pas écrire dedans et plantera.
+
+
+
+
+
+**Q2.1 :** Quel est le rôle de chacun des packages ?
+**Réponse :** 
+- `sqflite` : fournit l'API pour exécuter des requêtes SQLite en Flutter.
+- `path` : sert à construire des chemins de fichiers corrects pour tous les systèmes d'exploitation (pour trouver le fichier .db).
+- `sqflite_common_ffi` : Permet à `sqflite` de fonctionner sur Desktop (Windows/Linux/macOS) en utilisant FFI.
+
+**Q2.3 :** Pourquoi id est-il de type int? (nullable) ? Pourquoi toMap() n'ajoute-t-il id que s'il n'est pas null ?
+**Réponse :** `id` est nullable car avant d'être inséré dans la base, l'objet n'a pas encore d'identifiant (c'est SQLite qui le génère via AUTOINCREMENT). Dans `toMap()`, on n'ajoute l'`id` que s'il existe déjà, sinon on laisse SQLite générer la valeur par défaut.
+
+**Question de réflexion (Q2.4) :** Pourquoi utilise-t-on ici un constructeur factory plutôt qu'un constructeur classique ? Pourquoi écrit-on (map['prix'] as num).toDouble() au lieu de map['prix'] as double?
+**Réponse :** On utilise `factory` car `fromMap` ne crée pas forcément une nouvelle instance de manière classique (et permet d'appliquer de la logique de conversion). On utilise `(map['prix'] as num).toDouble()` car SQLite peut renvoyer un `int` (par exemple `5`) ou un `double` (par exemple `5.0`) pour une colonne REAL. Passer par `num` évite un crash de type.
