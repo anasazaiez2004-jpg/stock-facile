@@ -1,0 +1,1 @@
+Le fichier .db contient les données réelles de l'utilisateur (qui changent constamment) et est un fichier binaire lourd. Le fichier schema.sql contient uniquement le "plan" de la base (la structure CREATE TABLE) sous forme de texte lisible, ce qui est indispensable pour que les autres développeurs puissent recréer la base sur leur machine sans télécharger de données inutiles.
